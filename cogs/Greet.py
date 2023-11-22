@@ -23,6 +23,11 @@ class Greet(Cog):
         channel = self.client.get_channel(TEST_CHANNEL_ID)
         await channel.send(f'Cút mẹ m đi {member}.')
 
+    @Cog.listener()
+    async def on_reaction_add(self, reaction, user):
+        channel = self.client.get_channel(TEST_CHANNEL_ID)
+        await channel.send(f'{user} bảo là {reaction}.')
+
     @commands.command()
     async def hello(self, ctx: Context):
         await ctx.send('Lô con cặ')

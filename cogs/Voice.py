@@ -14,6 +14,7 @@ class Voice(Cog):
         if ctx.author.voice:
             channel = ctx.message.author.voice.channel
             voice = await channel.connect()
+            await ctx.send('Hello mấy cưng.')
             source = FFmpegPCMAudio('songs/song_2018.mp3')
             player = voice.play(source)
         else:

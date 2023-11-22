@@ -1,4 +1,5 @@
 from discord.ext.commands import Bot, Cog, Context
+from discord import Message
 from discord.ext import commands
 
 class Handle(Cog):
@@ -11,6 +12,21 @@ class Handle(Cog):
             await ctx.send('Command đéo tồn tại.')
         elif isinstance(error, commands.MissingPermissions):
             await ctx.send('Đéo có quyền.')
+
+    @Cog.listener()
+    async def on_message(self, message: Message):
+        if message.author == self.client.user:
+            return
+        
+        if 'lon' in message.content.lower():
+            # ~~Gạch bỏ~~
+            edited_content  = message.content.replace('lon', '~~lon~~')
+            await message.delete()
+            await message.channel.send(edited_content)
+
+        if 'gay' in message.content.lower():
+            emoji = '🏳️‍🌈'
+            await message.add_reaction(emoji)
 
     @commands.command()
     async def send_dm(self, ctx: Context, user_id: int, *, message):
