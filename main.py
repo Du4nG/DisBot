@@ -4,11 +4,11 @@ from secret import TOKEN, TEST_CHANNEL_ID
 import asyncio
 
 intents = discord.Intents.all()
-intents.members = True
-intents.messages = True
 
 client = Bot(command_prefix='!', intents=intents)
-extensions = ['cogs.Greet']
+extensions = ['cogs.Greet',
+              'cogs.Voice',
+              'cogs.Handle',]
 
 @client.event
 async def on_ready():

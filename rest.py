@@ -19,26 +19,6 @@ def check_queue(ctx: Context, id):
 #         await message.delete()
 #         await message.channel.send(edited_content)
 
-'''
-Phải có người join sẵn vào voice channel, nếu không, channel đó xem như không tồn tại.
-'''
-@client.command()
-async def join(ctx: Context):
-    if ctx.author.voice:
-        channel = ctx.message.author.voice.channel
-        voice = await channel.connect()
-        source = FFmpegPCMAudio('songs/song_2018.mp3')
-        player = voice.play(source)
-    else:
-        await ctx.send('Đéo vào được.')
-
-@client.command(pass_context=True)
-async def leave(ctx: Context):
-    if ctx.voice_client:
-        await ctx.guild.voice_client.disconnect()
-        await ctx.send('Bố đi đây.')
-    else:
-        await ctx.send('Có trong voice đéo đâu mà rời.')
 
 @client.command()
 async def pause(ctx: Context):
@@ -110,23 +90,4 @@ async def ban_error(ctx: Context, error):
 #     embed.add_field(name=ctx.author.display_name, value='Field Value', icon_url=ctx.author.avatar_url)
 #     embed.set_footer(text='Embed footer')
 #     await ctx.send(embed=embed)
-
-@client.event
-async def on_command_error(ctx: Context, error):
-    if isinstance(error, commands.CommandNotFound):
-        await ctx.send('Command đéo tồn tại.')
-    elif isinstance(error, commands.MissingPermissions):
-        await ctx.send('Đéo có quyền.')
-
-@client.command()
-async def send_dm(ctx, user_id: int, *, message):
-    # Fetch the user based on their ID
-    user = await client.fetch_user(user_id)
-    if user:
-        # Send a direct message to the user
-        print(user.id)
-        await user.send(message)
-        await ctx.send(f'Đã gửi cho {user.name}#{user.discriminator}')
-    else:
-        await ctx.send(f'Đéo tìm ra thằng {user_id}.')
 
