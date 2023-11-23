@@ -1,5 +1,5 @@
-from discord import FFmpegPCMAudio, Member
-from discord.ext.commands import has_permissions, MissingPermissions, Context
+from nextcord import FFmpegPCMAudio, Member
+from nextcord.ext.commands import has_permissions, MissingPermissions, Context
 
 from secret import TOKEN, TEST_CHANNEL_ID
 
@@ -12,7 +12,7 @@ def check_queue(ctx: Context, id):
 
 
 # @client.event
-# async def on_message(message: discord.Message):
+# async def on_message(message: nextcord.Message):
 #     if message.content == 'lon':
 #         # Gạch bỏ
 #         edited_content  = f'~~{message.content}~~'
@@ -22,7 +22,7 @@ def check_queue(ctx: Context, id):
 
 @client.command()
 async def pause(ctx: Context):
-    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+    voice = nextcord.utils.get(client.voice_clients, guild=ctx.guild)
     if voice.is_playing():
         voice.pause()
     else:
@@ -30,7 +30,7 @@ async def pause(ctx: Context):
 
 @client.command()
 async def resume(ctx: Context):
-    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+    voice = nextcord.utils.get(client.voice_clients, guild=ctx.guild)
     if voice.is_paused():
         voice.resume()
     else:
@@ -38,7 +38,7 @@ async def resume(ctx: Context):
 
 @client.command()
 async def stop(ctx: Context):
-    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+    voice = nextcord.utils.get(client.voice_clients, guild=ctx.guild)
     voice.stop()
     await ctx.send('Im mẹ mồm.')
 
@@ -86,7 +86,7 @@ async def ban_error(ctx: Context, error):
 
 # @client.command()
 # async def embed(ctx: Context):
-#     embed = discord.Embed(title='Embed', description='Embed description', color=0x00ff00)
+#     embed = nextcord.Embed(title='Embed', description='Embed description', color=0x00ff00)
 #     embed.add_field(name=ctx.author.display_name, value='Field Value', icon_url=ctx.author.avatar_url)
 #     embed.set_footer(text='Embed footer')
 #     await ctx.send(embed=embed)

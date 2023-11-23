@@ -1,6 +1,6 @@
-from discord.ext.commands import Bot, Cog, Context
-from discord import Message
-from discord.ext import commands
+from nextcord.ext.commands import Bot, Cog, Context
+from nextcord import Message
+from nextcord.ext import commands
 
 class Handle(Cog):
     def __init__(self, client: Bot):
@@ -40,5 +40,5 @@ class Handle(Cog):
         else:
             await ctx.send(f'Đéo tìm ra thằng {user_id}.')
 
-async def setup(client: Bot):
-    await client.add_cog(Handle(client))
+def setup(client: Bot):
+    client.add_cog(Handle(client))

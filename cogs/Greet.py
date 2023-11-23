@@ -1,6 +1,6 @@
-from discord.ext.commands import Bot, Cog, Context
-from discord.ext import commands
-from discord import Member
+from nextcord.ext.commands import Bot, Cog, Context
+from nextcord.ext import commands
+from nextcord import Member
 from secret import TEST_CHANNEL_ID
 
 
@@ -32,5 +32,5 @@ class Greet(Cog):
     async def hello(self, ctx: Context):
         await ctx.send('Lô con cặ')
 
-async def setup(client: Bot):
-    await client.add_cog(Greet(client))
+def setup(client: Bot):
+    client.add_cog(Greet(client))

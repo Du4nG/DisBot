@@ -1,6 +1,6 @@
-from discord.ext.commands import Bot, Cog, Context
-from discord.ext import commands
-from discord import FFmpegPCMAudio
+from nextcord.ext.commands import Bot, Cog, Context
+from nextcord.ext import commands
+from nextcord import FFmpegPCMAudio
 
 class Voice(Cog):
     def __init__(self, client: Bot):
@@ -28,5 +28,5 @@ class Voice(Cog):
         else:
             await ctx.send('Có trong voice đéo đâu mà rời.')
 
-async def setup(client: Bot):
-    await client.add_cog(Voice(client))
+def setup(client: Bot):
+    client.add_cog(Voice(client))
