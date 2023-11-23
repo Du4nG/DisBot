@@ -1,17 +1,17 @@
-from nextcord.ext.commands import Bot, Cog, Context
-from nextcord.ext import commands
-from nextcord import Member
-from secret import TEST_CHANNEL_ID
+import nextcord
+from nextcord.ext.commands import Bot, Cog
+from nextcord import Member, Interaction
+from secret import TEST_CHANNEL_ID, SERVER_ID
 
 
 class Greet(Cog):
     def __init__(self, client: Bot):
         self.client = client
 
-    @Cog.listener()
-    async def on_ready(self):
-        channel = self.client.get_channel(TEST_CHANNEL_ID)
-        await channel.send('Bố m đã online.')
+    # @Cog.listener()
+    # async def on_ready(self):
+    #     channel = self.client.get_channel(TEST_CHANNEL_ID)
+    #     await channel.send('Bố m đã online.')
 
     @Cog.listener()
     async def on_member_join(self, member: Member):
@@ -23,14 +23,9 @@ class Greet(Cog):
         channel = self.client.get_channel(TEST_CHANNEL_ID)
         await channel.send(f'Cút mẹ m đi {member}.')
 
-    @Cog.listener()
-    async def on_reaction_add(self, reaction, user):
-        channel = self.client.get_channel(TEST_CHANNEL_ID)
-        await channel.send(f'{user} bảo là {reaction}.')
-
-    @commands.command()
-    async def hello(self, ctx: Context):
-        await ctx.send('Lô con cặ')
+    @nextcord.slash_command(description='Gửi lời chào.', guild_ids=[SERVER_ID])
+    async def hello(self, interaction: Interaction):
+        await interaction.send('Lô con cặ')
 
 def setup(client: Bot):
     client.add_cog(Greet(client))
