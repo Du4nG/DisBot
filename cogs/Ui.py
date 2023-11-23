@@ -26,7 +26,7 @@ class Dropdown(ui.Select):
 class DropdownView(ui.View):
     def __init__(self):
         super().__init__()
-        self.add_item(Dropdown()) #
+        self.add_item(Dropdown())
 
 
 class Subscription(ui.View):
