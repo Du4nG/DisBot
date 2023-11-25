@@ -3,8 +3,8 @@ from nextcord import Message, Embed
 from nextcord.ext import commands
 
 class Handle(Cog):
-    def __init__(self, client: Bot):
-        self.client = client
+    def __init__(self, bot: Bot):
+        self.bot = bot
 
     @Cog.listener()
     async def on_command_error(self, ctx: Context, error):
@@ -15,7 +15,7 @@ class Handle(Cog):
 
     @Cog.listener()
     async def on_message(self, message: Message):
-        if message.author == self.client.user:
+        if message.author == self.bot.user:
             return
         
         if 'lon' in message.content.lower():
@@ -33,15 +33,13 @@ class Handle(Cog):
 
     @commands.command()
     async def send_dm(self, ctx: Context, user_id: int, *, message):
-        # Fetch the user based on their ID
-        user = await self.client.fetch_user(user_id)
+        user = await self.bot.fetch_user(user_id)
         if user:
-            # Send a direct message to the user
             print(user.id)
             await user.send(message)
             await ctx.send(f'Đã gửi cho {user.name}#{user.discriminator}')
         else:
             await ctx.send(f'Đéo tìm ra thằng {user_id}.')
 
-def setup(client: Bot):
-    client.add_cog(Handle(client))
+def setup(bot: Bot):
+    bot.add_cog(Handle(bot))

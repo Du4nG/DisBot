@@ -42,8 +42,8 @@ class Subscription(ui.View):
 
 
 class Ui(Cog):
-    def __init__(self, client: Bot):
-        self.client = client
+    def __init__(self, bot: Bot):
+        self.bot = bot
 
     @nextcord.slash_command(description='Subcribe chen nồ.', guild_ids=[SERVER_ID])
     async def subcribe(self, interaction: Interaction):
@@ -56,5 +56,5 @@ class Ui(Cog):
         await interaction.response.send_message('Chọn nhanh!', view=view)
 
 
-def setup(client: Bot):
-    client.add_cog(Ui(client))
+def setup(bot: Bot):
+    bot.add_cog(Ui(bot))
