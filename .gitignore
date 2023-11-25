@@ -1,6 +1,5 @@
+__pycache__/
+
 secret.py
 
-__pycache__/
-bin/
-
-# *.mp3
+*.exe

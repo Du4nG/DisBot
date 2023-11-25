@@ -1,7 +1,7 @@
 from nextcord import FFmpegPCMAudio, Member
 from nextcord.ext.commands import has_permissions, MissingPermissions, Context
 
-from secret import TOKEN, TEST_CHANNEL_ID
+from secret import TOKEN, TEXT_CHANNEL_ID
 
 queues = {}
 def check_queue(ctx: Context, id):

@@ -1,1 +1,2 @@
 nextcord
+nextcord[voice] youtube-dl
