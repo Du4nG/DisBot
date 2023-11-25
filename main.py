@@ -1,8 +1,6 @@
 import nextcord
-from nextcord import Interaction
 from nextcord.ext.commands import Bot
-from secret import TOKEN, SERVER_ID
-import asyncio
+from secret import TOKEN
 
 intents = nextcord.Intents.all()
 intents.members = True
@@ -13,19 +11,12 @@ extensions = ['cogs.Greet',
               'cogs.Voice',
               'cogs.Handle',
               'cogs.Ui',
-              'cogs.MusicCog',]
+              'cogs.Music',]
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.competing, name='máy ảo'))
+    await bot.change_presence(activity=nextcord.Activity(type=nextcord.ActivityType.competing, name='VSCode'))
     print('Lên sóng.')
-
-# async def main():
-#     for extension in extensions:
-#         bot.load_extension(extension)
-#     await bot.start(TOKEN, bot=True)
-
-# asyncio.run(main())
 
 for extension in extensions:
     bot.load_extension(extension)

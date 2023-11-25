@@ -1,9 +1,9 @@
 import nextcord
-from nextcord.ext.commands import Bot, Cog, Context 
+from nextcord.ext.commands import Bot, Cog 
 import youtube_dl
 from nextcord import FFmpegPCMAudio
 
-class MusicCog(Cog):
+class Music(Cog):
     def __init__(self, bot: Bot):
         self.bot = bot
 
@@ -40,4 +40,4 @@ class MusicCog(Cog):
         await interaction.response.send_message(f'Now playing: {info["entries"][0]["title"]}')
 
 def setup(bot: Bot):
-    bot.add_cog(MusicCog(bot))
+    bot.add_cog(Music(bot))
