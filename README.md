@@ -12,4 +12,4 @@
 - Tạo VM trên [Google Cloud](https://console.cloud.google.com/) (mục **Compute Engine**).
 - Nếu bần vl không có Visa hay MasterCard, có thể dùng thẻ ảo (MasterCard) trên **CAKE**.
 
-![Thẻ ảo trên CAKE](image\cake.png)
+![Thẻ ảo trên CAKE](image/cake.png)
