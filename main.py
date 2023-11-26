@@ -1,5 +1,6 @@
 import nextcord
 from nextcord.ext.commands import Bot
+import os
 from secret import TOKEN
 
 intents = nextcord.Intents.all()
@@ -21,4 +22,5 @@ async def on_ready():
 for extension in extensions:
     bot.load_extension(extension)
 
-bot.run(TOKEN)
+# bot.run(TOKEN)
+bot.run(os.environ['DISCORD_TOKEN'])
