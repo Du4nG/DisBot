@@ -21,11 +21,13 @@ class Voice(Cog):
                 await ctx.guild.voice_client.disconnect()
 
             voice = await channel.connect()
-            source = FFmpegPCMAudio('audio/hello_may_cung.mp3', options={'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'})
+            source = FFmpegPCMAudio('audio/hello_may_cung.mp3',
+                                    options={'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'},
+                                    executable=r'bin\ffmpeg.exe')
             voice.play(source)
             await ctx.send('Hello mấy cưng.')
         else:
-            await ctx.send('M vào trước t mới vào.')
+            await ctx.send('M chưa vào sao t biết vào kênh nào.')
 
     @commands.command()
     async def leave(self, ctx: Context):
