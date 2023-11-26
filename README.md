@@ -4,7 +4,7 @@
 >>> pip install -r /path/to/requirements.txt
 ```
 
-Tải FFmpeg tại [ffmpeg.org](https://ffmpeg.org/download.html) rồi bỏ 3 file exe vào thư mục bin. Tự tạo **secret.py** nhé.
+<!-- Tải FFmpeg tại [ffmpeg.org](https://ffmpeg.org/download.html), copy 3 file .exe vào thư mục bin. Tự tạo **secret.py** nhé. -->
 
 
 
