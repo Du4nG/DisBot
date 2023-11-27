@@ -1,5 +1,5 @@
 from nextcord.ext.commands import Bot, Cog, Context
-from nextcord import Message, File
+from nextcord import Message, File, errors
 from nextcord.ext import commands
 import os
 
@@ -38,7 +38,11 @@ class Handle(Cog):
             self.flag += 1
             if self.flag > file_count:
                 self.flag = 1
-            await message.add_reaction(emoji)
+            try:
+                await message.add_reaction(emoji)
+            except errors.NotFound:
+                pass
+
             await message.channel.send(file=File(gay_image_path))
 
         if 'stonk' in message.content.lower():
@@ -48,9 +52,6 @@ class Handle(Cog):
         if 'stink' in message.content.lower():
             image_path = r'image\stink.jpg'
             await message.channel.send(file=File(image_path))
-            # embed = Embed()
-            # embed.set_image(url='https://scontent.fsgn5-15.fna.fbcdn.net/v/t1.15752-9/370067957_1441938516366229_8779783017758847849_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=F2-vBIl5JPUAX-DHmua&_nc_ht=scontent.fsgn5-15.fna&oh=03_AdScnyu_uBdezf9rKzh-_zogyFxAFo0abwxTwey5i8QvMw&oe=6589AF64')
-            # await message.channel.send(embed=embed)
 
     @commands.command()
     async def send_dm(self, ctx: Context, user_id: int, *, message):

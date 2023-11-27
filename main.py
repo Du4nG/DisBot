@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext.commands import Bot
-import os
 from secret import TOKEN
 
 intents = nextcord.Intents.all()
@@ -12,7 +11,8 @@ extensions = ['cogs.Greet',
               'cogs.Voice',
               'cogs.Handle',
               'cogs.Ui',
-              'cogs.Music',]
+              'cogs.Music',
+              'cogs.test',]
 
 @bot.event
 async def on_ready():
@@ -22,5 +22,5 @@ async def on_ready():
 for extension in extensions:
     bot.load_extension(extension)
 
-# bot.run(TOKEN)
-bot.run(os.environ['DISCORD_TOKEN'])
+bot.run(TOKEN)
+# bot.run(os.environ['DISCORD_TOKEN'])

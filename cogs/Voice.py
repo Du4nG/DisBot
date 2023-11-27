@@ -10,7 +10,7 @@ class Voice(Cog):
     @commands.command()
     async def join(self, ctx: Context):
         '''
-        Nếu không có ai join sẵn vào một voice channel, channel đó xem như không tồn tại.
+        :   Gọi bot vào voice channel.
         '''
         if ctx.author.voice:
             channel = ctx.author.voice.channel
@@ -31,6 +31,9 @@ class Voice(Cog):
 
     @commands.command()
     async def leave(self, ctx: Context):
+        '''
+        :   Đá bot khỏi voice channel.
+        '''
         if ctx.voice_client:
             await ctx.voice_client.disconnect()
             await ctx.send('Bố đi đây.')
