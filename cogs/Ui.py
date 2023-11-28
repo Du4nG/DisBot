@@ -16,7 +16,7 @@ class Dropdown(ui.Select):
     async def callback(self, interaction: Interaction):
         match self.values[0]:
             case '1':
-                await interaction.response.send_message('Vào nhanh mẹ m lên.', ephemeral=True)
+                await interaction.response.send_message('Vào thì nhanh mẹ m lên.', ephemeral=True)
             case '2':
                 await interaction.response.send_message('Cút mẹ m.', ephemeral=True)
             case _:

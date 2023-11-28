@@ -3,8 +3,7 @@
 ```
 >>> pip install -r /path/to/requirements.txt
 ```
-Nhập và gửi **!help** để xem các !command.\
-Nhập **/** để xem các slash_command.
+Nhập và gửi **/help** để xem các slash command.
 <!-- Tải FFmpeg tại [ffmpeg.org](https://ffmpeg.org/download.html), copy 3 file .exe vào thư mục bin. Tự tạo **secret.py** nhé. -->
 
 
