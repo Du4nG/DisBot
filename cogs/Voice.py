@@ -14,10 +14,9 @@ class Voice(Cog):
         '''
         if ctx.author.voice:
             channel = ctx.author.voice.channel
-            '''
-            Đi theo người invoke lệnh.
-            '''
-            if ctx.guild.voice_client:
+            
+            # Nếu bot ở voice channel khác với user thì rời để theo user.
+            if ctx.guild.voice_client: 
                 await ctx.guild.voice_client.disconnect()
 
             voice = await channel.connect()

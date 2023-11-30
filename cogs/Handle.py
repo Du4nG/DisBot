@@ -63,5 +63,6 @@ class Handle(Cog):
         else:
             await ctx.send(f'Đéo tìm ra thằng {user_id}.')
 
+
 def setup(bot: Bot):
     bot.add_cog(Handle(bot))

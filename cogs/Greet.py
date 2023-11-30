@@ -13,7 +13,6 @@ class Greet(Cog):
     #     channel = self.bot.get_channel(TEXT_CHANNEL_ID)
     #     await channel.send('Bố m đã online.')
 
-
     @Cog.listener()
     async def on_member_join(self, member: Member):
         channel = self.bot.get_channel(WELCOME_CHANNEL_ID)
@@ -30,9 +29,8 @@ class Greet(Cog):
         new_image_path = r'image\pointing_new.jpg'
         img.save(new_image_path)
         
-        await channel.send(f'Chào mừng con gà {member.mention}.')
+        await channel.send(f'Đm, @everyone ra đây mà xem con gà {member.display_name}.')
         await channel.send(file=File(new_image_path))
-
 
     @Cog.listener()
     async def on_member_remove(self, member: Member):
@@ -42,6 +40,7 @@ class Greet(Cog):
     @nextcord.slash_command(description='Gửi lời chào.', guild_ids=[SERVER_ID])
     async def hello(self, interaction: Interaction):
         await interaction.send('Lô con cặ')
+
 
 def setup(bot: Bot):
     bot.add_cog(Greet(bot))
