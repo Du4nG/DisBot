@@ -63,8 +63,8 @@ class test(Cog):
             sound = gTTS(message, lang='vi')
             sound.save('audio/tts.mp3')
             source = FFmpegPCMAudio('audio/tts.mp3',
-                        options={'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'},
-                        executable=r'bin\ffmpeg.exe')
+                                     options={'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'},
+                                     executable=r'bin\ffmpeg.exe')
             voice.play(source)  
             await interaction.response.send_message(f'{user.display_name} vừa nói "{message}"') # ephemeral=True để ẩn tin nhắn
         else:
