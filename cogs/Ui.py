@@ -1,7 +1,6 @@
 import nextcord
 from nextcord.ext.commands import Bot, Cog
 from nextcord import Interaction, ui, ButtonStyle, SelectOption
-from secret import SERVER_ID
 
 
 class Dropdown(ui.Select):
@@ -45,12 +44,12 @@ class Ui(Cog):
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    @nextcord.slash_command(description='Subcribe chen nồ.', guild_ids=[SERVER_ID])
+    @nextcord.slash_command(description='Subcribe chen nồ.')
     async def subcribe(self, interaction: Interaction):
         view = Subscription()
         await interaction.response.send_message(view=view)
         
-    @nextcord.slash_command(description='Ẩm hay khô ?', guild_ids=[SERVER_ID])
+    @nextcord.slash_command(description='Ẩm hay khô ?')
     async def drop(self, interaction: Interaction):
         view = DropdownView()
         await interaction.response.send_message('Chọn nhanh!', view=view)

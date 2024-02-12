@@ -41,8 +41,10 @@ class test(Cog):
         embed.add_field(name='/spoof', value='Giả mạo một user.')
         embed.add_field(name='/drop', value='Bỏ phiếu.')
         embed.add_field(name='!leave', value='Đá bot khỏi voice channel.')
-        embed.add_field(name='/play', value='Phát nhạc trên Youtube.')
+        # embed.add_field(name='/play', value='Phát nhạc trên Youtube.')
         embed.add_field(name='/say', value='Chuyển text thành voice.')
+        embed.add_field(name='/send_dm', value='Gửi tin nhắn riêng.')
+        embed.add_field(name='gay', value='Đừng gõ từ này.')
 
         view = Buttonsss()
         view.add_item(ui.Button(label='DisBot',
@@ -64,7 +66,7 @@ class test(Cog):
             sound.save('audio/tts.mp3')
             source = FFmpegPCMAudio('audio/tts.mp3',
                                      options={'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'},
-                                     executable=r'bin\ffmpeg.exe')
+                                     executable='bin/ffmpeg.exe')
             voice.play(source)  
             await interaction.response.send_message(f'{user.display_name} vừa nói "{message}"') # ephemeral=True để ẩn tin nhắn
         else:

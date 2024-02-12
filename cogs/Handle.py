@@ -1,15 +1,16 @@
+import nextcord
 from nextcord.ext.commands import Bot, Cog, Context
-from nextcord import Message, File, errors
+from nextcord import Message, File, errors, Interaction
 from nextcord.ext import commands
 import os
 
-gay_image_dir = r'image\gay'
+gay_image_dir = r'image/gay'
 file_count = len(os.listdir(gay_image_dir))
 
 class Handle(Cog):
     def __init__(self, bot: Bot):
         self.bot = bot
-        self.flag = 1
+        self.cnt = 1
 
     @Cog.listener()
     async def on_command_error(self, ctx: Context, error):
@@ -34,10 +35,10 @@ class Handle(Cog):
 
         if 'gay' in message.content.lower():
             emoji = '❓'
-            gay_image_path = rf'image\gay\{self.flag}.jpg'
-            self.flag += 1
-            if self.flag > file_count:
-                self.flag = 1
+            gay_image_path = rf'image/gay/{self.cnt}.jpg'
+            self.cnt += 1
+            if self.cnt > file_count:
+                self.cnt = 1
             try:
                 await message.add_reaction(emoji)
             except errors.NotFound:
@@ -46,22 +47,21 @@ class Handle(Cog):
             await message.channel.send(file=File(gay_image_path))
 
         if 'stonk' in message.content.lower():
-            image_path = r'image\stonk.jpg'
+            image_path = r'image/stonk.jpg'
             await message.channel.send(file=File(image_path))
 
         if 'stink' in message.content.lower():
-            image_path = r'image\stink.jpg'
+            image_path = r'image/stink.jpg'
             await message.channel.send(file=File(image_path))
 
-    @commands.command()
-    async def send_dm(self, ctx: Context, user_id: int, *, message):
+    @nextcord.slash_command(description='Nhờ bot gửi tin nhắn riêng.')
+    async def send_dm(self, interaction: Interaction, user_id: str, *, message):
         user = await self.bot.fetch_user(user_id)
         if user:
-            print(user.id)
             await user.send(message)
-            await ctx.send(f'Đã gửi cho {user.name}#{user.discriminator}')
+            await interaction.send(f'Đã gửi cho {user.name}')
         else:
-            await ctx.send(f'Đéo tìm ra thằng {user_id}.')
+            await interaction.send(f'Đéo tìm ra thằng {user_id}.')
 
 
 def setup(bot: Bot):

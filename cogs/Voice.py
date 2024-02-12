@@ -9,13 +9,17 @@ class Voice(Cog):
         self.bot = bot
         self.d = {
             'cngthnh'           : 'pặc cặc',
-            '.iren3'            : 'minh',
-            'nm0861'            : 'khang',
-            'noodles10an2001'   : 'ân',
-            'onglowf'           : 'long',
-            'pmeee'             : 'my',
-            'Tank_nkao_lon'     : 'tank',
-            'Auditional Text'   : 'wefwefr',
+            'eh.huyen'          : 'huyền',
+            '.iren3'            : 'thế minh',
+            'maiwees'           : 'mai quế',
+            'ndk309'            : 'đăng khoa',
+            'nm0861'            : 'hoàng khang',
+            'noodles10an2001'   : 'ân trần',
+            'onglowf'           : 'thành long',
+            'pmeee'             : 'phượng my',
+            'pmee2.0'           : 'phượng my',
+            'Tank_nkao_lon'     : 'tank nhào lộn',
+            'TN'                : 'tuyết nhung'
         }
 
     @Cog.listener()
@@ -25,22 +29,23 @@ class Voice(Cog):
         after.channel   :   voice channel mà user join vào.
         """
         guild = member.guild
-        bot_voice_state = guild.voice_client
+        bot_after = guild.voice_client
 
-        if before.channel and after.channel is None:            # Không còn user trong voice channel.
+        if before.channel and bot_after:
             num_users = len(before.channel.members)
-            if num_users <= 1 and bot_voice_state.channel == before.channel:  # Bot còn 1 mình trong voice channel.
-                await bot_voice_state.disconnect()
+            if num_users <= 1 and bot_after.channel == before.channel:  # Bot còn 1 mình trong voice channel.
+                await bot_after.disconnect()
+
         if after.channel is not None:
-            if not bot_voice_state or bot_voice_state.channel != after.channel or after.channel != before.channel:
-                if bot_voice_state:                              # Bot phải rời voice channel hiện tại trước khi
-                    await bot_voice_state.disconnect()           # join channel mới, nếu không sẽ raise warning.      
+            if not bot_after or bot_after.channel != after.channel or after.channel != before.channel:
+
+                if bot_after:                              # Bot phải rời voice channel hiện tại trước khi
+                    await bot_after.disconnect()           # join channel mới, nếu không sẽ raise warning.      
                 voice_client = await after.channel.connect()
 
-                try:
+                sound = gTTS(f'Địt mẹ mày {member.name}', lang='vi')
+                if member.name in self.d:
                     sound = gTTS(f'Địt mẹ mày {self.d[member.name]}', lang='vi')
-                except KeyError:
-                    pass
 
                 if member.name == 'du4zg':
                     sound = gTTS('Anh Dũng đẹp trai đã đến.', lang='vi')
@@ -50,7 +55,6 @@ class Voice(Cog):
                                         options={'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'},
                                         executable='bin/ffmpeg.exe')
                 voice_client.play(source)
-
 
     @commands.command()
     async def join(self, ctx: Context):
@@ -67,7 +71,7 @@ class Voice(Cog):
             voice = await channel.connect()
             source = FFmpegPCMAudio('audio/hello_may_cung.mp3',
                                     options={'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'},
-                                    executable=r'bin\ffmpeg.exe')
+                                    executable='bin/ffmpeg.exe')
             voice.play(source)
             await ctx.send('Hello mấy cưng.')
         else:
