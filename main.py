@@ -6,7 +6,10 @@ intents = nextcord.Intents.all()
 intents.members = True
 intents.messages = True
 
-bot = Bot(command_prefix='!', intents=intents)
+bot = Bot(command_prefix='!',
+          intents=intents,
+          help_command=None)
+
 extensions = ['cogs.Greet',
               'cogs.Voice',
               'cogs.Handle',

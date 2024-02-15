@@ -1,7 +1,8 @@
 from gtts import gTTS
 from nextcord.ext import commands
 from nextcord.ext.commands import Bot, Cog, Context
-from nextcord import Member, VoiceState, FFmpegPCMAudio
+from nextcord import Member, VoiceState, FFmpegPCMAudio, Interaction
+from .test import test
 
 
 class Voice(Cog):
@@ -18,7 +19,7 @@ class Voice(Cog):
             'onglowf'           : 'thành long',
             'pmeee'             : 'phượng my',
             'pmee2.0'           : 'phượng my',
-            'Tank_nkao_lon'     : 'tank nhào lộn',
+            'Tank_nkao_lon'     : 'Tôn nhào lặn',
             'TN'                : 'tuyết nhung'
         }
 
@@ -58,9 +59,9 @@ class Voice(Cog):
 
     @commands.command()
     async def join(self, ctx: Context):
-        '''
+        """
         :   Gọi bot vào voice channel.
-        '''
+        """
         if ctx.author.voice:
             channel = ctx.author.voice.channel
             
@@ -75,19 +76,25 @@ class Voice(Cog):
             voice.play(source)
             await ctx.send('Hello mấy cưng.')
         else:
-            await ctx.send('M chưa vào sao t biết vào kênh nào.')
+            await ctx.send('M chưa vào sao bố biết vào kênh nào.')
 
     @commands.command()
     async def leave(self, ctx: Context):
-        '''
+        """
         :   Đá bot khỏi voice channel.
-        '''
+        """
         if ctx.voice_client:
             await ctx.voice_client.disconnect()
             await ctx.send('Bố đi đây.')
         else:
             await ctx.send('Có trong voice đéo đâu mà rời.')
 
+    @commands.command()
+    async def help(self, interaction: Interaction):
+        """
+        :   Viết lại help command.
+        """
+        await test.help(self, interaction)
 
 def setup(bot: Bot):
     bot.add_cog(Voice(bot))
