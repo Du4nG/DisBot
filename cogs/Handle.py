@@ -1,7 +1,7 @@
 import nextcord
-from nextcord.ext.commands import Bot, Cog, Context
-from nextcord import Message, File, errors, Interaction
+from nextcord import Message, File, errors, Interaction, SlashOption
 from nextcord.ext import commands
+from nextcord.ext.commands import Bot, Cog, Context
 import os
 
 gay_image_dir = r'image/gay'
@@ -15,7 +15,7 @@ class Handle(Cog):
     @Cog.listener()
     async def on_command_error(self, ctx: Context, error):
         if isinstance(error, commands.CommandNotFound):
-            await ctx.send('Command đéo tồn tại.')
+            await ctx.send('Command cặc gì vậy.')
         elif isinstance(error, commands.MissingPermissions):
             await ctx.send('Đéo có quyền.')
 
@@ -55,7 +55,10 @@ class Handle(Cog):
             await message.channel.send(file=File(image_path))
 
     @nextcord.slash_command(description='Nhờ bot gửi tin nhắn riêng.')
-    async def send_dm(self, interaction: Interaction, user_id: str, *, message):
+    async def dm(self, interaction: Interaction,
+                      user_id: str = SlashOption(description='Right click vào avatar người nhận, chọn Copy User ID.'),
+                      message: str = SlashOption(description='Nhập nội dung message.')
+                      ):
         user = await self.bot.fetch_user(user_id)
         if user:
             await user.send(message)

@@ -10,12 +10,13 @@ bot = Bot(command_prefix='!',
           intents=intents,
           help_command=None)
 
-extensions = ['cogs.Greet',
+extensions = ['cogs.crypto',
+              'cogs.Greet',
               'cogs.Voice',
               'cogs.Handle',
               'cogs.Ui',
               'cogs.Music',
-              'cogs.test',]
+              'cogs.test']
 
 @bot.event
 async def on_ready():

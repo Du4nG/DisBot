@@ -33,16 +33,16 @@ class Greet(Cog):
         await channel.send(f'Đm, @everyone ra đây mà xem con gà {member.display_name}.')
         await channel.send(file=File(new_image_path))
 
-        # await channel_2.send(f'Đm, @everyone ra đây mà xem con gà {member.display_name}.')
-        # await channel_2.send(file=File(new_image_path))
+        await channel_2.send(f'Đm, @everyone ra đây mà xem con gà {member.display_name}.')
+        await channel_2.send(file=File(new_image_path))
 
     @Cog.listener()
     async def on_member_remove(self, member: Member):
         channel = self.bot.get_channel(DISBOT_WELCOME_CHANNEL_ID)
         await channel.send(f'Cút mẹ m đi {member.display_name}.')
 
-        # channel_2 = self.bot.get_channel(HOI_VAN_HOA_SV_WELCOME_CHANNEL_ID)
-        # await channel_2.send(f'Cút mẹ m đi {member.display_name}.')
+        channel_2 = self.bot.get_channel(HOI_VAN_HOA_SV_WELCOME_CHANNEL_ID)
+        await channel_2.send(f'Cút mẹ m đi {member.display_name}.')
 
     @nextcord.slash_command(description='Gửi lời chào.')
     async def hello(self, interaction: Interaction):

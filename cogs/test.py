@@ -1,6 +1,6 @@
 from gtts import gTTS
 import nextcord
-from nextcord import Member, Interaction, Embed, ui, ButtonStyle, FFmpegPCMAudio
+from nextcord import Member, Interaction, Embed, ui, ButtonStyle, FFmpegPCMAudio, SlashOption
 from nextcord.ext.commands import Bot, Cog
 
 YOUTUBE_SUBSCRIPTION_LINK = 'https://www.youtube.com/channel/UCtVmdbgtwpI9oMQGYjezS9w'
@@ -28,23 +28,28 @@ class test(Cog):
         self.bot = bot
 
     @nextcord.slash_command(description='Giả mạo ai đó.')
-    async def spoof(self, interaction: Interaction, member: Member, *, message):
+    async def spoof(self, interaction: Interaction,
+                    member: Member = SlashOption(description='Chọn một user để giả mạo.'),
+                    message:   str = SlashOption(description='Nhập nội dung message.')
+                    ):
         webhook = await interaction.channel.create_webhook(name=member.display_name)
         await webhook.send(message, username=member.display_name, avatar_url=member.avatar.url)
         await webhook.delete()
 
     @nextcord.slash_command(description='Xem tất cả command.')
     async def help(self, interaction: Interaction):
-        embed = Embed(title='Command khả dụng  📌:', color=0x2B2D31)
+        embed = Embed(title='📌  Command khả dụng:', color=0x2B2D31)
         embed.set_thumbnail(url=self.bot.user.avatar.url)
         embed.add_field(name='!join', value='Gọi bot vào voice channel.')
+        embed.add_field(name='!leave', value='Đá bot khỏi voice channel.')
         embed.add_field(name='/spoof', value='Giả mạo một user.')
         embed.add_field(name='/drop', value='Bỏ phiếu.')
-        embed.add_field(name='!leave', value='Đá bot khỏi voice channel.')
-        # embed.add_field(name='/play', value='Phát nhạc trên Youtube.')
         embed.add_field(name='/say', value='Chuyển text thành voice.')
-        embed.add_field(name='/send_dm', value='Gửi tin nhắn riêng.')
+        embed.add_field(name='/dm', value='Gửi tin nhắn riêng.')
         embed.add_field(name='gay', value='Đừng gõ từ này.')
+        embed.add_field(name='/price', value='Lấy tỷ giá coin.')
+        embed.add_field(name='/help', value='Thay vì !help.')
+        # embed.add_field(name='/play', value='Phát nhạc trên Youtube.')
 
         view = Buttonsss()
         view.add_item(ui.Button(label='DisBot',
@@ -53,7 +58,7 @@ class test(Cog):
         await interaction.send(embed=embed, view=view)
 
     @nextcord.slash_command(description='Chuyển text thành voice.')
-    async def say(self, interaction: Interaction, *, message):
+    async def say(self, interaction: Interaction, message: str = SlashOption(description='Nhập text muốn chuyển thành voice.')):
         user = interaction.user
         if user.voice:
             channel = user.voice.channel

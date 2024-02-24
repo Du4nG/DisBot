@@ -40,8 +40,8 @@ class Voice(Cog):
         if after.channel is not None:
             if not bot_after or bot_after.channel != after.channel or after.channel != before.channel:
 
-                if bot_after:                              # Bot phải rời voice channel hiện tại trước khi
-                    await bot_after.disconnect()           # join channel mới, nếu không sẽ raise warning.      
+                if bot_after:                       # Bot phải rời voice channel hiện tại trước khi
+                    await bot_after.disconnect()    # join channel mới, nếu không sẽ raise warning.      
                 voice_client = await after.channel.connect()
 
                 sound = gTTS(f'Địt mẹ mày {member.name}', lang='vi')
