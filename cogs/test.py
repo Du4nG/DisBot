@@ -46,9 +46,10 @@ class test(Cog):
         embed.add_field(name='/drop', value='Bỏ phiếu.')
         embed.add_field(name='/say', value='Chuyển text thành voice.')
         embed.add_field(name='/dm', value='Gửi tin nhắn riêng.')
-        embed.add_field(name='gay', value='Đừng gõ từ này.')
-        embed.add_field(name='/price', value='Lấy tỷ giá coin.')
+        embed.add_field(name='/price', value='Lấy giá coin theo USDT.')
+        embed.add_field(name='/rate', value='Lấy tỷ giá một cặp coin.')
         embed.add_field(name='/help', value='Thay vì !help.')
+        embed.add_field(name='gay', value='Đừng gõ từ này.')
         # embed.add_field(name='/play', value='Phát nhạc trên Youtube.')
 
         view = Buttonsss()
