@@ -11,12 +11,13 @@ bot = Bot(command_prefix='!',
           help_command=None)
 
 extensions = ['cogs.crypto',
-              'cogs.Greet',
-              'cogs.Voice',
-              'cogs.Handle',
-              'cogs.Ui',
-              'cogs.Music',
-              'cogs.test']
+              'cogs.greet',
+              'cogs.handle',
+              'cogs.help_override', # Load help_override trước help
+              'cogs.help',
+              'cogs.music',
+              'cogs.ui',
+              'cogs.voice']
 
 @bot.event
 async def on_ready():
@@ -27,4 +28,3 @@ for extension in extensions:
     bot.load_extension(extension)
 
 bot.run(TOKEN)
-# bot.run(os.environ['DISCORD_TOKEN'])

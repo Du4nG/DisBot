@@ -1,8 +1,9 @@
+import nextcord
 from gtts import gTTS
 from nextcord.ext import commands
 from nextcord.ext.commands import Bot, Cog, Context
-from nextcord import Member, VoiceState, FFmpegPCMAudio, Interaction
-from .test import test
+from nextcord import Member, VoiceState, FFmpegPCMAudio, Interaction, SlashOption
+from .help import Help
 
 
 class Voice(Cog):
@@ -19,7 +20,7 @@ class Voice(Cog):
             'onglowf'           : 'thành long',
             'pmeee'             : 'phượng my',
             'pmee2.0'           : 'phượng my',
-            'Tank_nkao_lon'     : 'Tôn nhào lặn',
+            'tank_nkao_lon'     : 'tôn nhào lặn',
             'TN'                : 'tuyết nhung'
         }
 
@@ -42,6 +43,7 @@ class Voice(Cog):
 
                 if bot_after:                       # Bot phải rời voice channel hiện tại trước khi
                     await bot_after.disconnect()    # join channel mới, nếu không sẽ raise warning.      
+
                 voice_client = await after.channel.connect()
 
                 sound = gTTS(f'Địt mẹ mày {member.name}', lang='vi')
@@ -56,6 +58,26 @@ class Voice(Cog):
                                         options={'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'},
                                         executable='bin/ffmpeg.exe')
                 voice_client.play(source)
+
+    @nextcord.slash_command(description='Chuyển text thành voice.')
+    async def say(self, interaction: Interaction, message: str = SlashOption(description='Nhập text muốn chuyển thành voice.')):
+        user = interaction.user
+        if user.voice:
+            channel = user.voice.channel
+            # Nếu bot ở voice channel khác với user thì rời để theo user.
+            if interaction.guild.voice_client: 
+                await interaction.guild.voice_client.disconnect()
+            voice = await channel.connect()
+
+            sound = gTTS(message, lang='vi')
+            sound.save('audio/tts.mp3')
+            source = FFmpegPCMAudio('audio/tts.mp3',
+                                     options={'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'},
+                                     executable='bin/ffmpeg.exe')
+            voice.play(source)  
+            await interaction.response.send_message(f'{user.display_name} vừa nói "{message}"', ephemeral=True) # ephemeral=True để ẩn response khỏi mọi người.
+        else:
+            await interaction.send('Vào voice trước thằng lồz.')
 
     @commands.command()
     async def join(self, ctx: Context):
@@ -89,12 +111,6 @@ class Voice(Cog):
         else:
             await ctx.send('Có trong voice đéo đâu mà rời.')
 
-    @commands.command()
-    async def help(self, interaction: Interaction):
-        """
-        :   Viết lại help command.
-        """
-        await test.help(self, interaction)
 
 def setup(bot: Bot):
     bot.add_cog(Voice(bot))
