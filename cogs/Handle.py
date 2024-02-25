@@ -1,5 +1,5 @@
 import nextcord
-from nextcord import Message, File, errors, Interaction, SlashOption
+from nextcord import Message, File, errors, Interaction, SlashOption, Member
 from nextcord.ext import commands
 from nextcord.ext.commands import Bot, Cog, Context
 import os
@@ -56,16 +56,12 @@ class Handle(Cog):
 
     @nextcord.slash_command(description='Nhờ bot gửi tin nhắn riêng.')
     async def dm(self, interaction: Interaction,
-                      user_id: str = SlashOption(description='Right click vào avatar người nhận, chọn Copy User ID.'),
+                      member: Member = SlashOption(description='Lưu ý: Không thể gửi cho một bot.'),
                       message: str = SlashOption(description='Nhập nội dung message.')
                       ):
-        user = await self.bot.fetch_user(user_id)
-        if user:
-            await user.send(message)
-            await interaction.send(f'Đã gửi cho {user.name}')
-        else:
-            await interaction.send(f'Đéo tìm ra thằng {user_id}.')
-
+        user = await self.bot.fetch_user(member.id)
+        await user.send(message)
+        await interaction.response.send_message(f'Đã gửi cho **{user.name}**', ephemeral=True)
 
 def setup(bot: Bot):
     bot.add_cog(Handle(bot))

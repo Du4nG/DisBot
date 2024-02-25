@@ -59,7 +59,7 @@ class Voice(Cog):
                                         executable='bin/ffmpeg.exe')
                 voice_client.play(source)
 
-    @nextcord.slash_command(description='Chuyển text thành voice.')
+    @nextcord.slash_command(description='Chuyển text thành voice (tiếng Việt).')
     async def say(self, interaction: Interaction, message: str = SlashOption(description='Nhập text muốn chuyển thành voice.')):
         user = interaction.user
         if user.voice:
@@ -75,7 +75,7 @@ class Voice(Cog):
                                      options={'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'},
                                      executable='bin/ffmpeg.exe')
             voice.play(source)  
-            await interaction.response.send_message(f'{user.display_name} vừa nói "{message}"', ephemeral=True) # ephemeral=True để ẩn response khỏi mọi người.
+            await interaction.response.send_message(f'Bạn vừa nói "{message}".', ephemeral=True) # ephemeral=True để ẩn response khỏi mọi người.
         else:
             await interaction.send('Vào voice trước thằng lồz.')
 

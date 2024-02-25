@@ -1,6 +1,5 @@
 import nextcord
 from nextcord import Member, Interaction, Embed, ui, ButtonStyle, SlashOption
-from nextcord.ext import commands
 from nextcord.ext.commands import Bot, Cog
 
 YOUTUBE_SUBSCRIPTION_LINK = 'https://www.youtube.com/channel/UCtVmdbgtwpI9oMQGYjezS9w'
