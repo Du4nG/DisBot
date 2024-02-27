@@ -7,7 +7,9 @@ r = redis.Redis(
     password='B0HNbCgY5j9u7s6Vz',
 )
 
-r.set('queo:alert', 'ai xoa db lam con cho.')
+r.set('DungLe:alert', 'ai xoa db lam con cho.')
+
+r.delete('queo:1175820556004769883')
 
 keys = r.keys()
 

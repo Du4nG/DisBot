@@ -1,5 +1,6 @@
 import redis
-import requests 
+import requests
+import hashlib
 import nextcord
 from nextcord.ext.commands import Bot, Cog
 from nextcord.ext import tasks
@@ -8,6 +9,8 @@ from decimal import Decimal
   
 import json
 import websockets
+
+PREFIX = 'queo:'
 
 class Crypto(Cog):
     def __init__(self, bot: Bot):
@@ -27,7 +30,13 @@ class Crypto(Cog):
         data = data.json()
         price = data['lastPrice']
         return price       
-    
+
+    @staticmethod
+    def generate_hash_string(s: str, len=2**3):
+        md5_hash = hashlib.md5(s.encode()).hexdigest()
+        short_hash = md5_hash[:len]
+        return short_hash
+
     @nextcord.slash_command(description='Lấy giá coin theo USDT.')
     async def price(self, interaction: Interaction,
                       coin: str = SlashOption(description='Nhập mã coin: ETH, SOL, XRP, FDUSD...')
@@ -74,41 +83,46 @@ class Crypto(Cog):
         user = interaction.user
         channel_id = interaction.channel.id
         coin = coin.upper()
+        hash_string = self.generate_hash_string(coin+sign+str(target_price))
 
-        self.r.set(f'queo:{channel_id}', f'{coin},{sign},{target_price}')
+        self.r.set(f'queo:{hash_string}:{channel_id}', f'{coin},{sign},{target_price}')
 
-        await interaction.send(f'{user.name} vừa tạo một ALERT khi giá {coin.upper()} {sign} ${target_price}')
+        await interaction.send(f'{user.display_name} vừa tạo một ALERT khi giá {coin.upper()} {sign} ${target_price}')
 
-    @tasks.loop(seconds=1)
+    @tasks.loop(seconds=0.5)
     async def fetch_prices(self):
         async with websockets.connect('wss://stream.binance.com:9443/ws') as websocket:
-            await websocket.send(json.dumps({'method': 'SUBSCRIBE', 'params': [f'{coin.lower()}usdt@ticker'], 'id': 1}))
+            for key in self.r.keys(PREFIX):
+                channel_id = key[len(PREFIX):]
+                alert: str = self.r.get(key).decode()
+                coin, sign, target_price = alert.split(',')
+                target_price = float(target_price)
+
+                await websocket.send(json.dumps({'method': 'SUBSCRIBE', 'params': [f'{coin.lower()}usdt@ticker'], 'id': 1}))
 
             while True:
                 message = await websocket.recv()
                 data = json.loads(message)
                 print(data)
 
-                if 'c' in data:
-                    price = float(data['c'])
+                # if 'c' in data:
+                #     price = float(data['c'])
 
-                    for channel_key in self.r.scan_iter(match='queo:*'):
-                        channel_id = int(channel_key.split(':')[-1])
-                        alerts = self.r.hgetall(channel_key)
+                    # for channel_key in self.r.scan_iter(match='queo:*'):
+                    #     channel_id = int(channel_key.split(':')[-1])
+                    #     alerts = self.r.hgetall(channel_key)
                         
-                        # Iterate through alerts for this channel
-                        for alert_key, alert_info in alerts.items():
-                            coin, symbol, target_price = alert_info.decode().split(',')
-                            target_price = float(target_price)
+                    #     # Iterate through alerts for this channel
+                    #     for alert_key, alert_info in alerts.items():
+                    #         coin, symbol, target_price = alert_info.decode().split(',')
+                    #         target_price = float(target_price)
 
-                            if symbol == '>=' and price >= target_price:
-                                await self.bot.get_channel(channel_id).send(f'📢 Cả làng ra đây mà xem, [{coin}](<https://www.binance.com/en/trade/{coin}_USDT>) đã chạm ngưỡng **${target_price}**')
-                                # Optionally, remove the alert from Redis after triggering
-                                # self.r.hdel(channel_key, alert_key)
-                            elif symbol == '<=' and price <= target_price:
-                                await self.bot.get_channel(channel_id).send(f'📢 Cả làng ra đây mà xem, [{coin}](<https://www.binance.com/en/trade/{coin}_USDT>) đã chạm ngưỡng **${target_price}**')
-                                # Optionally, remove the alert from Redis after triggering
-                                # self.r.hdel(channel_key, alert_key)
+                    # if sign == '>=' and price >= target_price:
+                    #     await self.bot.get_channel(channel_id).send(f'📢 Cả làng ra đây mà xem, [{coin}](<https://www.binance.com/en/trade/{coin}_USDT>) đã chạm ngưỡng **${target_price}**')
+                    #     # self.r.hdel(channel_key, alert_key)
+                    # elif sign == '<=' and price <= target_price:
+                    #     await self.bot.get_channel(channel_id).send(f'📢 Cả làng ra đây mà xem, [{coin}](<https://www.binance.com/en/trade/{coin}_USDT>) đã chạm ngưỡng **${target_price}**')
+                    #     # self.r.hdel(channel_key, alert_key)
 
                     # if symbol == '>=' or symbol == '>':
                     #     if price >= target_price:
@@ -119,6 +133,12 @@ class Crypto(Cog):
                     #         await interaction.send(f'📢 Cả làng ra đây mà xem, [{coin}](<https://www.binance.com/en/trade/{coin}_USDT>) đã chạm ngưỡng **${target_price}**')
                     #         break
 
+    @fetch_prices.before_loop
+    async def before_fetch_prices(self):
+        """
+        Chờ bot lên sóng.
+        """
+        await self.bot.wait_until_ready()
 
 def setup(bot: Bot):
     bot.add_cog(Crypto(bot))
