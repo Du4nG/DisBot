@@ -11,6 +11,7 @@ import json
 import websockets
 
 PREFIX = 'queo:'
+HASH_STRING_LEN = 2**3
 
 class Crypto(Cog):
     def __init__(self, bot: Bot):
@@ -32,7 +33,7 @@ class Crypto(Cog):
         return price       
 
     @staticmethod
-    def generate_hash_string(s: str, len=2**3):
+    def generate_hash_string(s: str, len=HASH_STRING_LEN):
         md5_hash = hashlib.md5(s.encode()).hexdigest()
         short_hash = md5_hash[:len]
         return short_hash
@@ -92,37 +93,28 @@ class Crypto(Cog):
     @tasks.loop(seconds=0.5)
     async def fetch_prices(self):
         async with websockets.connect('wss://stream.binance.com:9443/ws') as websocket:
-            for key in self.r.keys(PREFIX):
-                channel_id = key[len(PREFIX):]
+            for key in self.r.keys(f'{PREFIX}*'):
+                channel_id = key[len(PREFIX) + HASH_STRING_LEN:]
                 alert: str = self.r.get(key).decode()
                 coin, sign, target_price = alert.split(',')
                 target_price = float(target_price)
-
+                
                 await websocket.send(json.dumps({'method': 'SUBSCRIBE', 'params': [f'{coin.lower()}usdt@ticker'], 'id': 1}))
 
-            while True:
-                message = await websocket.recv()
-                data = json.loads(message)
-                print(data)
+                while True:
+                    message = await websocket.recv()
+                    data = json.loads(message)
+                    print(data)
 
-                # if 'c' in data:
-                #     price = float(data['c'])
+                    # if 'c' in data:
+                    #     price = float(data['c'])
 
-                    # for channel_key in self.r.scan_iter(match='queo:*'):
-                    #     channel_id = int(channel_key.split(':')[-1])
-                    #     alerts = self.r.hgetall(channel_key)
-                        
-                    #     # Iterate through alerts for this channel
-                    #     for alert_key, alert_info in alerts.items():
-                    #         coin, symbol, target_price = alert_info.decode().split(',')
-                    #         target_price = float(target_price)
-
-                    # if sign == '>=' and price >= target_price:
-                    #     await self.bot.get_channel(channel_id).send(f'📢 Cả làng ra đây mà xem, [{coin}](<https://www.binance.com/en/trade/{coin}_USDT>) đã chạm ngưỡng **${target_price}**')
-                    #     # self.r.hdel(channel_key, alert_key)
-                    # elif sign == '<=' and price <= target_price:
-                    #     await self.bot.get_channel(channel_id).send(f'📢 Cả làng ra đây mà xem, [{coin}](<https://www.binance.com/en/trade/{coin}_USDT>) đã chạm ngưỡng **${target_price}**')
-                    #     # self.r.hdel(channel_key, alert_key)
+                    #     if sign == '>=' and price >= target_price:
+                    #         await self.bot.get_channel(channel_id).send(f'📢 Cả làng ra đây mà xem, [{coin}](<https://www.binance.com/en/trade/{coin}_USDT>) đã chạm ngưỡng **${target_price}**')
+                    #         # self.r.hdel(channel_key, alert_key)
+                    #     elif sign == '<=' and price <= target_price:
+                    #         await self.bot.get_channel(channel_id).send(f'📢 Cả làng ra đây mà xem, [{coin}](<https://www.binance.com/en/trade/{coin}_USDT>) đã chạm ngưỡng **${target_price}**')
+                    #         # self.r.hdel(channel_key, alert_key)
 
                     # if symbol == '>=' or symbol == '>':
                     #     if price >= target_price:
@@ -133,12 +125,15 @@ class Crypto(Cog):
                     #         await interaction.send(f'📢 Cả làng ra đây mà xem, [{coin}](<https://www.binance.com/en/trade/{coin}_USDT>) đã chạm ngưỡng **${target_price}**')
                     #         break
 
+
+
     @fetch_prices.before_loop
     async def before_fetch_prices(self):
         """
         Chờ bot lên sóng.
         """
         await self.bot.wait_until_ready()
+
 
 def setup(bot: Bot):
     bot.add_cog(Crypto(bot))
